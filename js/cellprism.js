@@ -8,7 +8,7 @@ var controls;
 var clock;
 
 var ground, groundGeometry, groundMaterial;
-var atoms, pdb, spheres;
+var atoms, pdb, sdf;
 var molecule;
 
 function initScene() {
@@ -49,16 +49,16 @@ function initLights(){
   point.target.position.set( 0, 0, 0 );
 
   // Set shadow parameters for the spotlight.
-  point.castShadow = true;
-  point.shadowCameraNear = 50;
-  point.shadowCameraFar = 1000;
-  point.shadowCameraFov = 50;
-  point.shadowBias = 0.0001;
-  point.shadowDarkness = 0.5;
+  // point.castShadow = true;
+  // point.shadowCameraNear = 50;
+  // point.shadowCameraFar = 1000;
+  // point.shadowCameraFov = 50;
+  // point.shadowBias = 0.0001;
+  // point.shadowDarkness = 0.5;
 
-  // Larger shadow map size means better looking shadows but impacts performance and texture memory usage.
-  point.shadowMapWidth = 1024;
-  point.shadowMapHeight = 1024;
+  // // Larger shadow map size means better looking shadows but impacts performance and texture memory usage.
+  // point.shadowMapWidth = 1024;
+  // point.shadowMapHeight = 1024;
 
   scene.add(point);
 }
@@ -81,14 +81,24 @@ function initGeometry(){
 }
 
 function initMolecule() {
-  PDB.fetch('1e79', function(response) {
-  // PDB.fetch('2dgc', function(response) {
-    pdb = response; 
-    atoms = PDB.parse(pdb)
+  // SDF.fetch('ligand/PC7_ideal', function(response) {
+  // SDF.fetch('ligand/ATP_ideal', function(response) {
+  SDF.fetch('ligand/EPH_ideal', function(response) {
+    sdf = response;
+    atoms = SDF.parse(sdf);
     molecule = atomic.atomicGeometry(atoms);
     scene.add(molecule);
     console.log(atomic.listElements(atoms));
   });
+
+  // PDB.fetch('1e79', function(response) {
+  // // PDB.fetch('2dgc', function(response) {
+  //   pdb = response; 
+  //   atoms = PDB.parse(pdb)
+  //   molecule = atomic.atomicGeometry(atoms);
+  //   scene.add(molecule);
+  //   console.log(atomic.listElements(atoms));
+  // });
 }
 
 function init(){
