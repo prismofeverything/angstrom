@@ -80,8 +80,8 @@ function initGeometry(){
 }
 
 function initMolecule() {
-  PDB.fetch('1e79', function(response) {
-  // PDB.fetch('2dgc', function(response) {
+  // PDB.fetch('1e79', function(response) {
+  PDB.fetch('2dgc', function(response) {
     pdb = response; 
     atoms = PDB.parse(pdb)
     molecule = atomic.atomicGeometry(atoms);
