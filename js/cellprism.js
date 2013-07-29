@@ -43,8 +43,9 @@ function initLights(){
   ambient = new THREE.AmbientLight(0x001111);
   scene.add(ambient);
 
+  pointPosition = new THREE.Vector3(-250, 250, 150);
   point = new THREE.SpotLight( 0xffffff, 1, 0, Math.PI, 1 );
-  point.position.set( -250, 250, 150 );
+  point.position.set(pointPosition.x, pointPosition.y, pointPosition.z);
   point.target.position.set( 0, 0, 0 );
 
   // Set shadow parameters for the spotlight.
@@ -80,8 +81,8 @@ function initGeometry(){
 }
 
 function initMolecule() {
-  // PDB.fetch('1e79', function(response) {
-  PDB.fetch('2dgc', function(response) {
+  PDB.fetch('1e79', function(response) {
+  // PDB.fetch('2dgc', function(response) {
     pdb = response; 
     atoms = PDB.parse(pdb)
     molecule = atomic.atomicGeometry(atoms);
@@ -133,6 +134,9 @@ function animate() {
 function render() {
   var delta = clock.getDelta();
   time += delta;
+
+  point.position.set(pointPosition.x * Math.cos(time * 0.2), pointPosition.y * Math.sin(time * 0.2), pointPosition.z);
+
   controls.update();
   renderer.render(scene, camera);
 }
