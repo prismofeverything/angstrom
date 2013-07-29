@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Cell Prism</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+      body {
+        font-family: Monospace;
+        background-color: #000;
+        color: #000;
+        margin: 0px;
+        overflow: hidden;
+      }
+      #info {
+        color: #000;
+        position: absolute;
+        top: 10px;
+        width: 100%;
+        text-align: center;
+        z-index: 100;
+        display:block;
+      }
+      #info a, .button { color: #f00; font-weight: bold; text-decoration: underline; cursor: pointer }
+    </style>
+  </head>
+
+  <body>
+    <div id="viewport"></div>
+    <script src="/js/XMLHttpRequest.js"></script>
+    <script src="/js/pdb.js"></script>
+    <script src="/js/three.min.r58.js"></script>
+    <script src="/js/OrbitControls.js"></script>
+    <script src="/js/atomic.js"></script>
+    <script src="/js/cellprism.js"></script>
+  </body>
+</html>
+
+<script type="x-shader/x-vertex" id="vertexshader">
+  attribute vec3 color;
+  attribute float size;
+  attribute float alpha;
+
+  varying vec3 vColor;
+
+  void main() {
+
+    vColor = color;
+    vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+
+    gl_PointSize = 5.0;
+    gl_Position = projectionMatrix * mvPosition;
+  }
+</script>
+
+<script type="x-shader/x-fragment" id="fragmentshader">
+  uniform vec3 color;
+  uniform sampler2D texture;
+
+  varying vec3 vColor;
+
+  void main() {
+    gl_FragColor = vec4( vColor, 0.5 );
+    gl_FragColor = gl_FragColor * texture2D( texture, gl_PointCoord ); 
+  }
+
+</script>
