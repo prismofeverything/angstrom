@@ -372,6 +372,26 @@ var atomic = function() {
     }
   }
 
+  for (var element in atomicProperties) {
+    var color = atomicProperties[element].color;
+    var radius = atomicProperties[element].radius;
+
+    atomicProperties[element].material = new THREE.MeshPhongMaterial({color: color || 0xff1493});
+    atomicProperties[element].geometry = new THREE.SphereGeometry(radius + 0.45, 16, 16);
+  }
+
+  function listElements(molecule) {
+    var elements = {};
+    for (var s = 0; s < molecule.length; s++) {
+      console.log(molecule[s].length);
+      for (var a = 0; a < molecule[s].length; a++) {
+        elements[molecule[s][a].element] = true;
+      }
+    }
+
+    console.log(elements);
+  }
+
   function atomicGeometry(segments) {
     var spheres = [], properties;
     var atoms, atom, sphere, material, geometry;
@@ -384,8 +404,8 @@ var atomic = function() {
       for (var a = 0; a < atoms.length; a++) {
         atom = atoms[a];
         properties = atomicProperties[atom.element];
-        material = new THREE.MeshPhongMaterial({color: properties.color || 0xff1493});
-        geometry = new THREE.SphereGeometry(properties.radius + 0.45, 16, 16);
+        material = properties.material;
+        geometry = properties.geometry;
         sphere = new THREE.Mesh(geometry, material);
         sphere.position.set(atom.x, atom.y, atom.z);
         segment.add(sphere);
@@ -399,6 +419,7 @@ var atomic = function() {
 
   return {
     atomicProperties: atomicProperties,
-    atomicGeometry: atomicGeometry
+    atomicGeometry: atomicGeometry,
+    listElements: listElements
   }
 } ();

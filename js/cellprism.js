@@ -86,6 +86,7 @@ function initMolecule() {
     atoms = PDB.parse(pdb)
     molecule = atomic.atomicGeometry(atoms);
     scene.add(molecule);
+    // atomic.listElements(atoms);
   });
 }
 
