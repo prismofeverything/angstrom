@@ -389,7 +389,12 @@ var atomic = function() {
       }
     }
 
-    console.log(elements);
+    var names = [];
+    for (var e in elements) {
+      names.push(e);
+    }
+
+    return names;
   }
 
   function atomicGeometry(segments) {
