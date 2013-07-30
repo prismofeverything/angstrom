@@ -2,9 +2,11 @@
 
 A 3d molecular interaction playground for javascript
 
-![ATP](http://imgur.com/CSMxME8)
+![ATP](http://i.imgur.com/CSMxME8.png)
 
-## view molecules from PDB (the Protein Data Bank):  http://www.rcsb.org/pdb/home/home.do
+## View molecules from PDB (Protein Data Bank)
+
+Angstrom pulls molecule descriptions from http://www.rcsb.org/pdb/home/home.do
 
 Right now angstrom reads files in .pdb or .sdf format (sufficient for most protiens and ligands).  
 
