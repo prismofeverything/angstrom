@@ -82,8 +82,8 @@ function initGeometry(){
 
 function initMolecule() {
   // SDF.fetch('ligand/PC7_ideal', function(response) {
-  // SDF.fetch('ligand/ATP_ideal', function(response) {
-  SDF.fetch('ligand/EPH_ideal', function(response) {
+  // SDF.fetch('ligand/EPH_ideal', function(response) {
+  SDF.fetch('ligand/ATP_ideal', function(response) {
     sdf = response;
     atoms = SDF.parse(sdf);
     molecule = atomic.atomicGeometry(atoms);
