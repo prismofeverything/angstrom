@@ -95,29 +95,35 @@
      :controls controls
      :time (.now js/Date)}))
 
-(defn init
-  []
-  (let [scene (init-scene)]
-    (swap! world merge scene)))
+(defn update
+  [state]
+  state)
 
 (defn render
-  []
-  (let [{:keys [clock time controls renderer scene camera]} @world
-        delta (.getDelta clock)
-        time (+ delta time)]
+  [state]
+  (let [state (update state)
+        {:keys [time controls renderer scene camera]} state]
     (.update controls)
     (.render renderer scene camera)
-    (swap! world assoc :time time)))
+    state))
+
+(defn update-time
+  [state]
+  (let [delta (.getDelta (:clock state))]
+    (update-in state [:time] #(+ delta %))))
 
 (defn animate
   []
   (.requestAnimationFrame js/window animate)
-  (render))
+  (let [state (update-time @world)
+        state (render state)]
+    (swap! world merge state)))
 
 (set! 
  (.-onload js/window) 
  (fn [] 
-   (init)
-   (animate)))
+   (let [state (init-scene)]
+     (swap! world merge state)
+     (animate))))
 
 (connect/connect)
