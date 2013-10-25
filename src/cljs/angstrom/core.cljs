@@ -5,6 +5,8 @@
 
 (def world (atom {}))
 
+(def point-position (js/THREE.Vector3. -250 250 150))
+
 (defn window-size
   []
   [(.-innerWidth js/window) (.-innerHeight js/window)])
@@ -40,9 +42,10 @@
   []
   (let [ambient (js/THREE.AmbientLight. 0x0011111)
         point (js/THREE.SpotLight. 0xffffff 1 0 js/Math.PI 1)]
-    (.set (.-position point) -250 250 150)
+    (.copy (.-position point) point-position)
     (.set (.-position (.-target point)) 0 0 0)
-    [ambient point]))
+    {:ambient ambient
+     :point point}))
 
 (defn init-molecule
   [scene]
@@ -51,7 +54,8 @@
    (fn [atoms]
      (let [molecule (atomic/molecular-geometry atoms)]
        (.log js/console molecule)
-       (.add scene molecule)))))
+       (.add scene molecule)
+       (swap! world assoc :molecule molecule)))))
 
 (defn on-key-down [event])
 (defn on-key-up [event])
@@ -83,7 +87,7 @@
         controls (js/THREE.OrbitControls. camera)
         lights (init-lights)]
     (init-listeners)
-    (doseq [light lights]
+    (doseq [[key light] (seq lights)]
       (.add scene light))
     (init-molecule scene)
     {:clock (js/THREE.Clock.)
@@ -93,11 +97,18 @@
      :renderer renderer
      :viewport viewport
      :controls controls
+     :lights lights
      :time (.now js/Date)}))
 
 (defn update
   [state]
-  state)
+  (let [{:keys [lights time]} state]
+    (.set
+     (.-position (:point lights))
+     (* (.-x point-position) (js/Math.cos (* time 0.2)))
+     (* (.-y point-position) (js/Math.sin (* time 0.2)))
+     (.-z point-position))
+    state))
 
 (defn render
   [state]
@@ -119,9 +130,9 @@
         state (render state)]
     (swap! world merge state)))
 
-(set! 
- (.-onload js/window) 
- (fn [] 
+(set!
+ (.-onload js/window)
+ (fn []
    (let [state (init-scene)]
      (swap! world merge state)
      (animate))))
